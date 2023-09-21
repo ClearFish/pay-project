@@ -1,7 +1,7 @@
 import { createRouter,createWebHashHistory,RouteRecordRaw } from "vue-router";;
 import Home from "@/views/home.vue";
 import Deposit from "@/views/deposit.vue"
-
+import Recharge from "@/views/recharge.vue"
 const routes : Array<RouteRecordRaw> = [
     {
         path: '/',
@@ -18,6 +18,11 @@ const routes : Array<RouteRecordRaw> = [
         path:"/deposit",
         name:"Usercenter",
         component:Deposit
+    },
+    {
+        path:"/recharge",
+        name:"Recharge",
+        component:Recharge
     }
 ]
 
