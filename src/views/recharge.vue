@@ -1,7 +1,7 @@
 <template>
     <div class="recharge_box">
         <div class="img_box">
-            <img src="@/assets/vibbank.png" alt="">
+            <img src="@/assets/vibbank.png" alt="" class="bank">
         </div>
         <div class="content_box">
             <div class="left">
@@ -282,8 +282,8 @@
     .recharge_box > .content_box {
         flex-direction: row;
     }
-    .img_box > img {
-        width: 8%;
+    .recharge_box >.img_box > .bank {
+        width: 4%;
         height: auto;
     }
   .recharge_box > .content_box > .left {
