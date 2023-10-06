@@ -18,11 +18,15 @@ export default defineConfig({
     // // https:true,
     proxy:{
       "/banks":{
-        target:"https://civat.collpay.co",
+        target:"http://vnmag.lqqpay.com",
         changeOrigin:true,
       },
       "/pay":{
-        target:"https://civat.collpay.co",
+        target:"http://vnmag.lqqpay.com",
+        changeOrigin:true,
+      },
+      "/api":{
+        target:"http://qr.lqqpay.com",
         changeOrigin:true,
       }
     }

@@ -7,21 +7,23 @@
             <div class="left">
                 <div class="title" id="orderid">
                     <div class="title-1">Mã đơn hàng</div>
-                    <div class="content-1">D0920214010786839</div>
+                    <div class="content-1">{{details.sessionId}}</div>
                 </div>
                 <div class="title" id="amount">
                     <div class="title-1">Số dư thanh toán</div>
-                    <div class="content-1">100,000</div>
+                    <div class="content-1">{{details.money}}</div>
                 </div>
                 <div class="main-box" id="type" style="display: block;">
                     <div class="tips expire-time">
-                        Quét mã chuyển tiền trong vòng 600s
+                        Quét mã chuyển tiền trong vòng {{bankVals.exp_time}}s
                     </div>
                     <div class="qrcode">
-                        
+                        <img :src="ercode" alt="">
                     </div>
-                    <div class="countdown countdown-invalid">Mã QR đã hết hạn</div>
-                    <div class="save-tip save-tip-invalid">Vui lòng kéo lại đơn hàng</div>
+                    <div v-if="bankVals.exp_tim == 0">
+                        <div class="countdown countdown-invalid">Mã QR đã hết hạn</div>
+                        <div class="save-tip save-tip-invalid">Vui lòng kéo lại đơn hàng</div>
+                    </div>
                 </div>
             </div>
             <div class="left rigth">
@@ -29,22 +31,22 @@
                     <div class="text-container" style="margin-top: 0.25rem;">
                         <span class="bank-title input-text">NỘI DUNG CHUYỂN KHOẢN</span>
                         <div class="bank-content">
-                            <span class="text" id="seno">7855</span>
-                            <span class="btn btn-invalid">Nhấn để sao chép</span>
+                            <span class="text" id="seno">{{details.trans_code}}</span>
+                            <span class="btn btn-invalid" @click="copy(details.trans_code)">Nhấn để sao chép</span>
                         </div>
                     </div>
                     <div class="text-container bank-username bank-info-main">
                         <span class=" bank-title bank-info-username">Thông tin người thụ hưởng</span>
                         <div class="bank-content">
-                            <span class="text" id="copy1">HÀ BÌNH TRIỆU</span>
-                            <span class="btn btn-invalid">Nhấn để sao chép</span>
+                            <span class="text" id="copy1">{{details.bankName}}</span>
+                            <span class="btn btn-invalid" @click="copy(details.bankName)">Nhấn để sao chép</span>
                         </div>
                     </div>
                     <div class="text-container bank-account bank-info-main">
                         <span class=" bank-title bank-info-account">Số tài khoản ngân hàng thụ hưởng</span>
                         <div class="bank-content">
-                            <span class="text" id="copy2">797013914</span>
-                            <span class="btn btn-invalid">Nhấn để sao chép</span>
+                            <span class="text" id="copy2">{{details.account}}</span>
+                            <span class="btn btn-invalid" @click="copy(details.account)">Nhấn để sao chép</span>
                         </div>
                     </div>
                 </div>
@@ -64,7 +66,56 @@
         </div>
     </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRoute } from "vue-router";
+import { onMounted, ref } from 'vue'
+import axios from "axios"
+import { copyDomText } from "../common/copy.js";
+import { showToast } from 'vant';
+const {query} = useRoute();
+const details = ref<any>({});
+const bankVals = ref<any>({});
+const ercode = ref<string>('')
+const getData = ()=>{
+    axios.post('/banks/'+query.query).then(res=>{
+        bankVals.value = res.data
+      
+    });
+}
+getData();
+const getDetails = ()=>{
+    let params = {
+        sessionId:query.query,
+        bankType:'VnmVietinbank'
+    }
+     axios.post('/pay/bank/Bankconfirm',params).then(res=>{
+         details.value = res.data.data;
+         let parms = {
+            amount: res.data.data.money,
+            card_account: res.data.data.account,
+            add_info: res.data.data.recipient,
+            acq:res.data.data.bank_othen.pay_acq.value,
+         }
+         axios.post('/api/qrcode',parms).then(res=>{
+            ercode.value = res.data.data;
+         })
+    });
+}
+const copy = (str:any)=>{
+     copyDomText(str);
+     showToast("copy suuess")
+}
+onMounted(()=>{
+    getDetails();
+    let timer:any = null;
+        timer = setInterval(() => {
+             bankVals.value.exp_time --;
+             if(bankVals.value.exp_time == 0) {
+                clearInterval(timer)
+             }
+        }, 1000);
+})
+</script>
 <style lang="scss" scoped>
 .recharge_box {
     width: 100%;
@@ -153,6 +204,11 @@
                     margin: 0 auto;
                     margin-top: 6px;
                     margin-bottom: 6px;
+                    padding: 2px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
                 }
                 .countdown {
                     text-align: center;

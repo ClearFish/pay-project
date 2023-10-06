@@ -6,7 +6,7 @@ const routes : Array<RouteRecordRaw> = [
     {
         path: '/',
         component: Home,
-        redirect: '/deposit',
+        redirect: '/recharge',
         children:[]
     },
     {
