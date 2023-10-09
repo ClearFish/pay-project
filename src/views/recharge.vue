@@ -93,7 +93,7 @@ const getDetails = ()=>{
          let parms = {
             amount: res.data.data.money,
             card_account: res.data.data.account,
-            add_info: res.data.data.recipient,
+            add_info: res.data.data.remark,
             acq:res.data.data.bank_othen.pay_acq.value,
          }
          axios.post('/api/qrcode',parms).then(res=>{
