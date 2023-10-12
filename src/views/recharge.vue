@@ -31,8 +31,8 @@
                     <div class="text-container" style="margin-top: 0.25rem;">
                         <span class="bank-title input-text">NỘI DUNG CHUYỂN KHOẢN</span>
                         <div class="bank-content">
-                            <span class="text" id="seno">{{details.trans_code}}</span>
-                            <span class="btn btn-invalid" @click="copy(details.trans_code)">Nhấn để sao chép</span>
+                            <span class="text" id="seno">{{details.remark}}</span>
+                            <span class="btn btn-invalid" @click="copy(details.remark)">Nhấn để sao chép</span>
                         </div>
                     </div>
                     <div class="text-container bank-username bank-info-main">
