@@ -28,6 +28,10 @@ export default defineConfig({
       "/api":{
         target:"http://qr.lqqpay.com",
         changeOrigin:true,
+      },
+      "/addons":{
+        target:"https://61lottery.com",
+        changeOrigin:true,
       }
     }
   }

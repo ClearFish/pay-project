@@ -2,11 +2,12 @@ import { createRouter,createWebHashHistory,RouteRecordRaw } from "vue-router";;
 import Home from "@/views/home.vue";
 import Deposit from "@/views/deposit.vue"
 import Recharge from "@/views/recharge.vue"
+import usdtRecharge from "@/views/usdtRecharge.vue"
 const routes : Array<RouteRecordRaw> = [
     {
         path: '/',
         component: Home,
-        redirect: '/recharge',
+        redirect: '/usdtrecharge',
         children:[]
     },
     {
@@ -23,6 +24,11 @@ const routes : Array<RouteRecordRaw> = [
         path:"/recharge",
         name:"Recharge",
         component:Recharge
+    },
+    {
+        path:"/usdtrecharge",
+        name:"usdtRecharge",
+        component:usdtRecharge
     }
 ]
 
