@@ -17,7 +17,7 @@
                 <p class="title">USDT-TRC20：</p>
                 <div class="content dress">
                     <p class="address_info">{{rechargeInfo.qrcode}}</p>
-                    <img src="@/assets/usdt-recharge/copy_icon.png" alt="" @click="copy('TTeY5EmTaTENoJm88zoMLJodxL6scy77E9')">
+                    <img src="@/assets/usdt-recharge/copy_icon.png" alt="" @click="copy(rechargeInfo.qrcode)">
                 </div>
             </div>
             <div class="remind">
