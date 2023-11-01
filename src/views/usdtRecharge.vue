@@ -59,14 +59,14 @@ const toUrl = (url:any) =>{
 let rechargeInfo = ref<any>({});
 const value = ref('');
 const codeVal = ref('');
-const level = ref<Level>('M');
-const renderAs = ref<RenderAs>('svg');
+const level = ref<string>('M');
+const renderAs = ref<string>('svg');
 
 onMounted(async()=>{
     getDetails();
 })
 const getDetails = ()=>{
-    let params = {
+    let params:any = {
         lang:"zh-cn",
         order_number:query.order_number,
         token:query.token
