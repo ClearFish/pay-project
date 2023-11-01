@@ -22,9 +22,9 @@
             </div>
             <div class="remind">
                 <div class="title">注意事项</div>
-                <div class="content">1.最小充值金额: <text style="color:#F0A70A">10USDT</text>, 小于最小金额的充值将不会到账。</div>
-                <div class="content">2.请勿向上述地址充值任何非币种资产，否则资产将不可找回.</div>
-                <div class="content">3.请务必确认操作环境安全，防止信息被篡改和泄露.</div>
+                <!-- <div class="content">1.最小充值金额: <text style="color:#F0A70A">10USDT</text>, 小于最小金额的充值将不会到账。</div> -->
+                <div class="content">1.请勿向上述地址充值任何非币种资产，否则资产将不可找回.</div>
+                <div class="content">2.请务必确认操作环境安全，防止信息被篡改和泄露.</div>
             </div>
             <div class="link_box">
                 <img :src="item.img" alt="" v-for="(item,index) in linkList" :key="index" @click="toUrl(item.url)">
