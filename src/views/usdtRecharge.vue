@@ -71,7 +71,8 @@ const getDetails = ()=>{
         order_number:query.order_number,
         token:query.token
     }
-    axios.get('/addons/epay/api/orderinfo',params).then(res=>{
+    console.log(params,"12123123")
+    axios.get('/addons/epay/api/orderinfo',{params:params}).then(res=>{
         let data = res.data.data;
         rechargeInfo.value = data;
         value.value = data.qrcode
@@ -156,10 +157,12 @@ const getDetails = ()=>{
                 .title {
                     color: #F6465D;
                     margin-bottom: 12px;
+                    text-align: left;
                 }
                 .content {
                     font-size: 12px;
                     margin-bottom: 8px;
+                    text-align: left;
                 }
             }
             .link_box {
