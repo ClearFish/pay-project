@@ -3,6 +3,7 @@ import Home from "@/views/home.vue";
 import Deposit from "@/views/deposit.vue"
 import Recharge from "@/views/recharge.vue"
 import usdtRecharge from "@/views/usdtRecharge.vue"
+import usdtDeposit from "@/views/usdtDeposit.vue"
 const routes : Array<RouteRecordRaw> = [
     {
         path: '/',
@@ -29,6 +30,11 @@ const routes : Array<RouteRecordRaw> = [
         path:"/usdtrecharge",
         name:"usdtRecharge",
         component:usdtRecharge
+    },
+    {
+        path:"/usdtdeposit",
+        name:"usdtDeposit",
+        component:usdtDeposit
     }
 ]
 

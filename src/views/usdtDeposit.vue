@@ -1,10 +1,8 @@
 <template>
     <div class="recharge_box">
         <div class="top_box">
-            <!-- 该地址仅支持充值 USDT-TRC20,不支持其他币种 -->
-            <div class="content top_content">This address only supports depositing USDT-TRC20 and does not support other currencies.</div>
-            <!-- 到账金额按照实际充值金额计算 -->
-            <div class="content top_content">The amount received is calculated based on the actual recharge amount</div>
+            <div class="content">该地址仅支持充值 USDT-TRC20,不支持其他币种</div>
+            <div class="content">到账金额按照实际充值金额计算</div>
         </div>
         <div class="container_box">
             <div class="code_box">
@@ -23,13 +21,10 @@
                 </div>
             </div>
             <div class="remind">
-                <!--注意事项  -->
-                <div class="title">Precautions</div>
+                <div class="title">注意事项</div>
                 <!-- <div class="content">1.最小充值金额: <text style="color:#F0A70A">10USDT</text>, 小于最小金额的充值将不会到账。</div> -->
-                <!-- 请勿向上述地址充值任何非币种资产，否则资产将不可找回. -->
-                <div class="content">1.Please do not deposit any non-currency assets to the above address, otherwise the assets will not be retrieved.</div>
-                <!-- 请务必确认操作环境安全，防止信息被篡改和泄露. -->
-                <div class="content">2.Please make sure the operating environment is safe to prevent information from being tampered with and leaked.</div>
+                <div class="content">1.请勿向上述地址充值任何非币种资产，否则资产将不可找回.</div>
+                <div class="content">2.请务必确认操作环境安全，防止信息被篡改和泄露.</div>
             </div>
             <div class="link_box">
                 <img :src="item.img" alt="" v-for="(item,index) in linkList" :key="index" @click="toUrl(item.url)">
@@ -96,11 +91,6 @@ const getDetails = ()=>{
                 text-align: center;
                 color: #fff;
             }
-            .top_content {
-                padding: 0 10px;
-                margin-bottom: 8px;
-                box-sizing: border-box;
-            }
         }
         .container_box {
             padding: 0 20px;
@@ -112,7 +102,7 @@ const getDetails = ()=>{
                 height: 300px;
                 border-radius: 10px;
                 box-shadow: 2px 2px 2px #a0a3a3;
-                margin-top: -80px;
+                margin-top: -100px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
