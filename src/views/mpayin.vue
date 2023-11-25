@@ -1,6 +1,6 @@
 <template>
     <div class="recharge_box">
-        <div v-if="timeLeft<0">
+        <div v-if="timeLeft>0">
             <div class="logo_box">
                 <img src="@/assets/mpayin/logo.png" alt="">
             </div>
