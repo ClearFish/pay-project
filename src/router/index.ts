@@ -45,7 +45,7 @@ const routes : Array<RouteRecordRaw> = [
     },
     {
         path:"/cecoPay",
-        name:"mPayin",
+        name:"cecoPay",
         component:cecoPay,
     }
 ]

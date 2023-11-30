@@ -6,7 +6,7 @@
             </div>
             <div class="top_box">
                 <p class="time">{{timeStr}}</p>
-                <p class="money">₹200</p>
+                <p class="money">₹{{rechargeInfo.amount}}</p>
             </div>
             <div class="container_box">
                 <div class="select_box">
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="btn_box">
-                <div class="btn"> Pay ₹ 200 </div>
+                <div class="btn"> Pay ₹ {{rechargeInfo.amount}} </div>
             </div>
             <div class="info_box">
                 <div class="copys">©2023 Technical Support All Rights Reserved By Mpay</div>
@@ -102,7 +102,7 @@ let timeLeft = ref(600);
 let timeStr = ref('10:00')
 let intervalFun;
 onMounted(async()=>{
-    // getDetails();
+    getDetails();
     clearInterval(intervalFun)
     intervalFun = setInterval(()=>{
         if(timeLeft.value == 0) {
@@ -117,19 +117,19 @@ onMounted(async()=>{
 const transferTime = (val:number)=>{
     let min = Math.floor((val % 3600) / 60);
     let sec = val % 60;
-    timeStr.value = min+':'+sec
+    timeStr.value = (min > 10 ? min : '0'+min)+':'+(sec > 10 ? sec : '0'+sec)
 }
 onUnmounted(()=>{
     clearInterval(intervalFun)
 })
 const getDetails = ()=>{
     let params:any = {
-        lang:"zh-cn",
-        order_number:query.order_number,
+        orderNo:query.order_number,
     }
-    axios.get('/addons/epay/api/orderinfo',{params:params}).then(res=>{
+    axios.get('/pay/upi',{params:params}).then(res=>{
         let data = res.data.data;
         rechargeInfo.value = data;
+        // timeLeft.value = data.exp_time
         value.value = data.qrcode
     })
 }

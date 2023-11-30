@@ -22,7 +22,7 @@ export default defineConfig({
         changeOrigin:true,
       },
       "/pay":{
-        target:"http://vnmag.lqqpay.com",
+        target:"https://pay-inrkk.collpay.co",
         changeOrigin:true,
       },
       "/api":{
