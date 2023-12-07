@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="item_box">
-                    <p class="label">Rference Number</p>
+                    <p class="label">Remark</p>
                     <div class="right">
                         <p class="value">{{rechargeInfo.orderNo}}</p>
                         <img src="@/assets/cecopay/copy.svg" alt="" @click="copy(rechargeInfo.orderNo)">
@@ -47,8 +47,14 @@
                 <div class="list_box">
                     <p>PayTM,Phone PE,UPI</p>
                     <div class="list_con">
-                        <div class="list_item" v-for="(item,index) in selectList" :key="index">
-                            <img :src="item.img" alt="">
+                        <div class="list_item" 
+                            v-for="(item,index) in selectList" 
+                            :key="index" 
+                            :class="chosedIndex == index ?'chosed':''"
+                            @click="chosePay(item,index)">
+                            <div class="img_box">
+                                <img :src="item.img" alt="">
+                            </div>
                             <p>{{item.name}}</p>
                         </div>
                     </div>
@@ -97,6 +103,7 @@ import { copyDomText } from "../common/copy.js";
 import { showToast } from 'vant';
 import Img1 from "@/assets/mpayin/pay_1.png";
 import Img2 from "@/assets/mpayin/pay_2.png";
+import Img3 from "@/assets/mpayin/pay_3.png";
 import Img4 from "@/assets/mpayin/logo.png"
 import QRCode from "qrcode"
 const copy = (str:any)=>{
@@ -109,9 +116,10 @@ const value = ref('');
 let inputValue = ref('')
 const selectList = ref(
     [
-        {name:'Paytm',img:Img1},
-        {name:'PhonePe',img:Img2},
-        {name:'UPI',img:Img4}
+        {name:'Paytm',img:Img1,link:'paytmmp://pay'},
+        {name:'PhonePe',img:Img2,link:'phonepe://pay'},
+        {name:'Google Pay',img:Img3,link:'gpay://upi/pay'},
+        {name:'UPI',img:Img4,link:'upi://pay'}
     ]
 )
 let timeLeft = ref(600);
@@ -135,6 +143,12 @@ const transferTime = (val:number)=>{
     let sec = val % 60;
     timeStr.value = (min > 10 ? min : '0'+min)+':'+(sec > 10 ? sec : '0'+sec)
 }
+let payVal = ref<any>(selectList.value[0])
+let chosedIndex = ref<number>(0)
+const chosePay = (item:any,index:number)=>{
+    payVal.value = item;
+    chosedIndex.value = index
+}
 onUnmounted(()=>{
     clearInterval(intervalFun)
 })
@@ -156,6 +170,8 @@ const savePng = ()=>{
     downloadLink.click();
 }
 const submit = ()=>{
+    console.log(payVal.value,"123123");
+    let urlParams = rechargeInfo.value.qrcode.split("?")[1]
     let params:any = {
         orderNo:query.order_number,
         RefNo:inputValue.value
@@ -164,6 +180,7 @@ const submit = ()=>{
         let data = res.data;
         if(data.success) {
             showToast('success!')
+            window.location.href = payVal.value.link+'?'+urlParams
         }else {
             showToast(data.message)
         }
@@ -312,7 +329,7 @@ const submit = ()=>{
                 justify-content: space-between;
                 margin-top: 20px;
                 .list_item {
-                    width: 30%;
+                    width: 24%;
                     border-radius: 10px;
                     border: 1px solid #666;
                     padding: 10px 0;
@@ -320,11 +337,14 @@ const submit = ()=>{
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
+                    .img_box {
+                        height: 32px;
+                    }
                     img {
                         width: 40px;
                     }
-                    p {
-                        // height: 40px;
+                    &.chosed {
+                        border-color: #F8B403;
                     }
                 }
             }
