@@ -17,9 +17,9 @@
                     </div>
                 </div>
                 <div class="item_box">
-                    <p class="label">Remark</p>
+                    <p class="label">Rference Number</p>
                     <div class="right">
-                        <p class="value">{{rechargeInfo.orderNo}}</p>
+                        <p class="value">{{rechargeInfo.remark}}</p>
                         <img src="@/assets/cecopay/copy.svg" alt="" @click="copy(rechargeInfo.orderNo)">
                     </div>
                 </div>
@@ -147,7 +147,9 @@ let payVal = ref<any>(selectList.value[0])
 let chosedIndex = ref<number>(0)
 const chosePay = (item:any,index:number)=>{
     payVal.value = item;
-    chosedIndex.value = index
+    chosedIndex.value = index;
+    let urlParams = rechargeInfo.value.qrcode.split("?")[1]
+    window.location.href = item.link+'?'+urlParams
 }
 onUnmounted(()=>{
     clearInterval(intervalFun)
@@ -170,8 +172,7 @@ const savePng = ()=>{
     downloadLink.click();
 }
 const submit = ()=>{
-    console.log(payVal.value,"123123");
-    let urlParams = rechargeInfo.value.qrcode.split("?")[1]
+    
     let params:any = {
         orderNo:query.order_number,
         RefNo:inputValue.value
@@ -180,7 +181,7 @@ const submit = ()=>{
         let data = res.data;
         if(data.success) {
             showToast('success!')
-            window.location.href = payVal.value.link+'?'+urlParams
+            
         }else {
             showToast(data.message)
         }
@@ -328,8 +329,10 @@ const submit = ()=>{
                 width: 98%;
                 justify-content: space-between;
                 margin-top: 20px;
+                flex-wrap: wrap;
+                row-gap: 16px;
                 .list_item {
-                    width: 24%;
+                    width: 48%;
                     border-radius: 10px;
                     border: 1px solid #666;
                     padding: 10px 0;
