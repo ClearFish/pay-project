@@ -177,11 +177,10 @@ const submit = ()=>{
         orderNo:query.order_number,
         RefNo:inputValue.value
     }
-    axios.get('/pay/upi/ToSubmit',params).then(async (res)=>{
+    axios.post('/pay/upi/ToSubmit',params).then(async (res)=>{
         let data = res.data;
-        if(data.success) {
-            showToast('success!')
-            
+        if(data.code == 1) {
+            showToast('successful!')
         }else {
             showToast(data.message)
         }
