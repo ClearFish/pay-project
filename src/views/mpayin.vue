@@ -24,6 +24,10 @@
                         </li>
                     </ul>
                 </div>
+                <div class="input_box">
+                    <p class="title">UTR</p>
+                    <input type="text" placeholder="UTR / UPI Ref No / UPI Transaction ID" v-model="inputValue">
+                </div>
                 <div class="ercode_box">
                     <div class="top">
                         <img src="@/assets/mpayin/logo_2.png" alt="">
@@ -43,12 +47,12 @@
                 <div style="color: rgb(184, 141, 52); font-size: 12px; padding: 0px 16px;">
                     <p>Note:</p>
                     <p> If you have paid but have not received funds, please click the link to submit UTR. 
-                        <a href="javascript:void(0)" style="color: cornflowerblue;font-size:18px">Click here to submit UTR</a>
+                        <a href="javascript:void(0)" style="color: cornflowerblue;font-size:18px" @click="submitUtR">Click here to submit UTR</a>
                     </p>
                 </div>
             </div>
             <div class="btn_box">
-                <div class="btn"> Pay ₹ {{rechargeInfo.amount}} </div>
+                <div class="btn" @click="pay"> Pay ₹ {{rechargeInfo.amount}} </div>
             </div>
             <div class="info_box">
                 <div class="copys">©2023 Technical Support All Rights Reserved By Mpay</div>
@@ -92,15 +96,18 @@ const checkedVal = ref<number>(0)
 const isShowQr = ref<boolean>(false)
 const selectList = ref(
     [
-        {name:'Paytm',img:Img1},
-        {name:'PhonePe',img:Img2},
-        {name:'Google Pay',img:Img3},
-        {name:'OTHER APPS',img:Img4}
+        {name:'Paytm',img:Img1,link:'paytmmp://pay'},
+        {name:'PhonePe',img:Img2,link:'phonepe://pay'},
+        {name:'Google Pay',img:Img3,link:'gpay://upi/pay'},
+        {name:'OTHER APPS',img:Img4,link:'upi://pay'}
     ]
 )
 let timeLeft = ref(600);
 let timeStr = ref('10:00')
 let intervalFun;
+let payVal = ref<any>('');
+let urlParams = ref<any>('')
+let inputValue = ref('')
 onMounted(async()=>{
     getDetails();
     clearInterval(intervalFun)
@@ -129,12 +136,34 @@ const getDetails = ()=>{
     axios.get('/pay/upi',{params:params}).then(res=>{
         let data = res.data.data;
         rechargeInfo.value = data;
-        // timeLeft.value = data.exp_time
+        timeLeft.value = data.exp_time
         value.value = data.qrcode
+        urlParams.value = rechargeInfo.value.qrcode.split("?")[1]
+        payVal.value = selectList.value[0].link + "?"+ urlParams.value
     })
 }
-const chosePay = (itemm:any,index:number)=>{
+
+const chosePay = (item:any,index:number)=>{
     checkedVal.value = index
+    payVal.value = item.link+"?"+ urlParams.value
+}
+const pay = () =>{
+    window.location.href = payVal.value
+}
+const submitUtR = () =>{
+    let params:any = {
+        orderNo:query.order_number,
+        RefNo:inputValue.value
+    }
+    axios.post('/pay/upi/ToSubmit',params).then(async (res)=>{
+        let data = res.data;
+        if(data.success) {
+            showToast('success!')
+            
+        }else {
+            showToast(data.message)
+        }
+    })
 }
 const showQr = ()=>{
     isShowQr.value = !isShowQr.value
@@ -146,6 +175,26 @@ const showQr = ()=>{
     min-height: 100vh;
     background: #e3e3e4;
     padding-bottom: 20px;
+    .input_box {
+            margin-top: 20px;
+            gap: 20px;
+            .title {
+                font-size: 16px;
+            }
+            input {
+                width: 100%;
+                height: 42px;
+                line-height: 42px;
+                box-shadow: none;
+                box-sizing: border-box;
+                outline: none;
+                border-radius: 4px;
+                color: rgba(0, 0, 0, 0.88);
+                padding-left: 10px;
+                border: 1px solid #d9d9d9;
+                font-size: 16px;
+            }
+        }
     .logo_box {
         display: flex;
         justify-content: center;
