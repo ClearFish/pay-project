@@ -1,7 +1,14 @@
 <template>
     <div class="recharge_box">
         <div class="img_box">
-            <img src="@/assets/vibbank.png" alt="" class="bank">
+            <!-- <img src="@/assets/vibbank.png" alt="" class="bank"> -->
+            <div class="time_box">
+                Quét mã chuyển tiền trong vòng {{bankVals.exp_time}}s
+            </div>
+        </div>
+        <div class="remind_box">
+            <p>Quý khách vui lòng không tắt trình duyệt cho đến khi nhận được kết quả giao dịch trên website. Xin cảm ơn!</p>
+            <img src="@/assets/recharge/closeBtn.svg" alt="">
         </div>
         <div class="content_box">
             <div class="left">
@@ -121,9 +128,20 @@ onMounted(()=>{
     width: 100%;
     .img_box {
         width: 100%;
-        height: 44px;
-        background: rgba(255, 255, 255, 1);
+        height: 80px;
+        background: #1f419b;
         box-shadow: 0px 4px 4px rgba(73, 100, 243, 0.1);
+        .time_box {
+            max-width: 1200px;
+            padding-right: 20px;
+            box-sizing: border-box;
+            color: #fff;
+            justify-content: flex-end;
+            display: flex;
+            height: 100%;
+            align-items: center;
+            font-size: 18px;
+        }
         img {
             display: block;
             width: 40%;
@@ -132,6 +150,28 @@ onMounted(()=>{
             margin-top: 0;
             position: relative;
             z-index: 1;
+        }
+    }
+    .remind_box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 30px;
+        box-sizing: border-box;
+        background: #dfecff;
+        border-radius: 8px;
+        
+        color: #0066fa;
+        width: calc(100% - 20px);
+        margin: 0 auto;
+        margin-top: 10px;
+        img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        p {
+            width: 90%;
         }
     }
     .content_box {
