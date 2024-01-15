@@ -6,7 +6,7 @@
         <div class="container_box">
             <p class="title">Pay to Bank</p>
             <div class="mount_box">
-                <p class="money">₹500</p>
+                <p class="money">₹{{rechargeInfo.amount}}</p>
                 <p>Payment Amount</p>
             </div>
             <div class="content_box">
@@ -14,12 +14,12 @@
                     <p class="title">UTR</p>
                     <div class="sub_box">
                         <div class="input_box">
-                            <input type="text" placeholder="please enter a 12-ditit UTR">
-                            <p class="button">Paste</p>
+                            <input type="text" placeholder="please enter a 12-ditit UTR" v-model="inputVal">
+                            <p class="button" @click="copy(inputVal)">Paste</p>
                         </div>
                         <div class="pay_box">
                             <div class="left paymentmonlie" @click="toPayment">Payment Failed</div>
-                            <div class="left right">Submit</div>
+                            <div class="left right" @click="submitUPI">Submit</div>
                         </div>
                     </div>
                     <div class="notes">
@@ -30,42 +30,42 @@
                         <div class="item_box">
                             <p class="label">Bank Name:</p>
                             <div class="value">
-                                <p class="val">12312313</p>
+                                <p class="val"></p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Account No.:</p>
                             <div class="value">
-                                <p class="val">12312313</p>
+                                <p class="val">{{}}</p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">IFSC Code:</p>
                             <div class="value">
-                                <p class="val">12312313</p>
+                                <p class="val"></p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Account Holder Name:</p>
                             <div class="value">
-                                <p class="val">12312313</p>
+                                <p class="val"></p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Remarks:</p>
                             <div class="value">
-                                <p class="val">12312313</p>
+                                <p class="val">{{rechargeInfo.remark}}</p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Amount:</p>
                             <div class="value">
-                                <p class="val">12312313</p>
+                                <p class="val">{{rechargeInfo.amount}}</p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                 <img src="@/assets/tbpay/err_1.png" alt="">
                 <p>Do you want us to replace another UPI ID?</p>
                 <div class="bottom">
-                    <div class="btn sure">Yes</div>
+                    <div class="btn sure" @click="sureReplace">Yes</div>
                     <div class="btn cancle" @click="show = false">No</div>
                 </div>
             </div>
@@ -94,12 +94,73 @@
     </div>
 </template>
 <script setup lang="ts">
-import {ref} from "vue"
+import {ref, onUnmounted,onMounted} from "vue"
+import axios from "axios"
+import { copyDomText } from "../common/copy.js";
+import { showToast } from 'vant';
+import { useRoute } from "vue-router";
 let show = ref(false)
+const copy = (str:any)=>{
+     copyDomText(str);
+     showToast("copy suuess")
+}
 const toPayment = ()=>{
     console.log(123)
     show.value = true
 }
+const {query} = useRoute();
+let rechargeInfo = ref<any>({});
+let timeLeft = ref(600);
+let timeStr = ref('10:00')
+let inputVal = ref('')
+let intervalFun;
+const getDetails = ()=>{
+    let params:any = {
+        orderNo:query.order_number,
+    }
+    axios.get('/pay/upi',{params:params}).then(async (res)=>{
+        let data = res.data.data;
+        rechargeInfo.value = data;
+        timeLeft.value = data.exp_time
+        // value.value = await QRCode.toDataURL(data.qrcode)
+    })
+}
+const transferTime = (val:number)=>{
+    let min = Math.floor((val % 3600) / 60);
+    let sec = val % 60;
+    timeStr.value = (min > 10 ? min : '0'+min)+':'+(sec > 10 ? sec : '0'+sec)
+}
+const submitUPI = ()=>{
+    let params:any = {
+        orderNo:query.order_number,
+        RefNo:inputVal.value
+    }
+    axios.post('/pay/upi/ToSubmit',params).then(async (res)=>{
+        let data = res.data;
+        if(data.code == 1) {
+            showToast('successful!')
+        }else {
+            showToast(data.message)
+        }
+    })
+}
+const sureReplace = ()=> {
+    inputVal.value = '';
+    show.value = false
+}
+onMounted(async()=>{
+    getDetails();
+    clearInterval(intervalFun)
+    intervalFun = setInterval(()=>{
+        if(timeLeft.value == 0) {
+            timeLeft.value = 0
+        }else {
+            timeLeft.value--;
+            transferTime(timeLeft.value)
+        }
+    },1000)
+    
+})
 </script>
 
 <style lang="scss" scoped>
