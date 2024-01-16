@@ -30,28 +30,28 @@
                         <div class="item_box">
                             <p class="label">Bank Name:</p>
                             <div class="value">
-                                <p class="val"></p>
+                                <p class="val">{{rechargeInfo.bank_name}}</p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Account No.:</p>
                             <div class="value">
-                                <p class="val">{{}}</p>
+                                <p class="val">{{rechargeInfo.account}}</p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">IFSC Code:</p>
                             <div class="value">
-                                <p class="val"></p>
+                                <p class="val">{{rechargeInfo.ifsc}}</p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Account Holder Name:</p>
                             <div class="value">
-                                <p class="val"></p>
+                                <p class="val">{{rechargeInfo.AccountHolderName}}</p>
                                 <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
                             </div>
                         </div>
