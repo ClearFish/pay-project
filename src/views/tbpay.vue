@@ -1,7 +1,7 @@
 <template>
     <div class="tp_box">
         <div class="top_box">
-            <img src="@/assets/tbpay/logo.png" alt="">
+            <img src="@/assets/tbpay/logo.jpg" alt="">
         </div>
         <div class="container_box">
             <p class="title">Pay to Bank</p>
@@ -31,42 +31,42 @@
                             <p class="label">Bank Name:</p>
                             <div class="value">
                                 <p class="val">{{rechargeInfo.bank_name}}</p>
-                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
+                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="" @click="copy(rechargeInfo.bank_name)">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Account No.:</p>
                             <div class="value">
                                 <p class="val">{{rechargeInfo.account}}</p>
-                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
+                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="" @click="copy(rechargeInfo.account)">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">IFSC Code:</p>
                             <div class="value">
                                 <p class="val">{{rechargeInfo.ifsc}}</p>
-                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
+                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="" @click="copy(rechargeInfo.ifsc)">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Account Holder Name:</p>
                             <div class="value">
                                 <p class="val">{{rechargeInfo.AccountHolderName}}</p>
-                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
+                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="" @click="copy(rechargeInfo.AccountHolderName)">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Remarks:</p>
                             <div class="value">
                                 <p class="val">{{rechargeInfo.remark}}</p>
-                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
+                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="" @click="copy(rechargeInfo.remark)">
                             </div>
                         </div>
                         <div class="item_box">
                             <p class="label">Amount:</p>
                             <div class="value">
                                 <p class="val">{{rechargeInfo.amount}}</p>
-                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="">
+                                <img src="@/assets/usdt-recharge/copy_icon.png" alt="" @click="copy(rechargeInfo.amount)">
                             </div>
                         </div>
                     </div>
@@ -165,7 +165,7 @@ onMounted(async()=>{
 
 <style lang="scss" scoped>
 .tp_box {
-    background: #F8FBFF;
+    background: #fff ;
     min-height: 100vh;
     padding: 0 10px;
     box-sizing: border-box;
@@ -207,6 +207,7 @@ onMounted(async()=>{
         }
         .content_box {
             padding: 10px;
+            box-sizing: border-box;
             border-radius: 4px;
             box-shadow: 0 0 5px 0 #c0cad9;
             margin-top: 10px;
@@ -244,6 +245,7 @@ onMounted(async()=>{
                 border: 1px solid #cdcdcd;
                 border-radius: 8px;
                 padding-left: 10px;
+                box-sizing: border-box;
                 input {
                     outline: none;
                     border-radius: 2px;
@@ -369,6 +371,7 @@ onMounted(async()=>{
 } 
 .pop_content {
     padding: 20px;
+    box-sizing: border-box;
     p {
         font-size: 16px;
         color: #001229;
