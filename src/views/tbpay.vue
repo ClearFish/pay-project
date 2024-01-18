@@ -214,12 +214,27 @@ onMounted(async()=>{
             display: flex;
             align-items: center;
             gap: 10px;
+            .first_box {
+                width: 100%;
+                .sub_box {
+                    width: 100%;
+                    .input_box {
+                        width: 78%;
+                        input {
+                            width: 70%;
+                        }
+                        .button {
+                            width: 60px;
+                        }
+                    }
+                }
+            }
             .sub_box {
                 display: flex;
                 justify-content: space-between;
                 gap: 8px;
                 .pay_box {
-                    flex: 1;
+                   width: 60px;
                 }
             }
             .notes {
