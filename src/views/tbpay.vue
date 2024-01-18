@@ -357,9 +357,16 @@ onMounted(async()=>{
                 .notes {
                     display: none;
                 }
+                .input_box {
+                    width: 100% !important;
+                    .button {
+                        width: 120px !important;
+                    }
+                }
                 .sub_box {
                     flex-direction: column;
                     .pay_box {
+                        width: 100%;
                         .paymentmonlie {
                             display: block;
                              border: 1px solid #9fa8b8;
