@@ -1,7 +1,7 @@
 <template>
     <div class="recharge_box">
         <div class="img_box">
-            <img src="@/assets/vibbank.png" alt="" class="bank">
+            <img src="@/assets/zalopay/logo.png" alt="" class="bank">
             <!-- <div class="time_box">
                 Quét mã chuyển tiền trong vòng {{bankVals.exp_time}}s
             </div> -->
@@ -146,7 +146,7 @@ onMounted(()=>{
         // }
         img {
             display: block;
-            width: 40%;
+            width: 10%;
             height: auto;
             margin: 5px auto;
             margin-top: 0;
@@ -381,7 +381,7 @@ onMounted(()=>{
         flex-direction: row;
     }
     .recharge_box >.img_box > .bank {
-        width: 4%;
+        width: 2%;
         height: auto;
     }
   .recharge_box > .content_box > .left {
