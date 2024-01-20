@@ -1,6 +1,10 @@
 <template>
     <div class="recharge_box">
-        <div class="container">
+        <div v-if="hasExpred" class="other_box">
+            <img src="@/assets/zalopay/cuo.jpeg" alt="">
+            <p class="word">Lệnh chuyển tiền vô hiệu . Hãy tạo lệnh mới</p>
+        </div>
+        <div class="container" v-else>
             <div class="top">
                 <div class="left">
                     <p class="title">Số tiền</p>
@@ -74,6 +78,7 @@ const ercode = ref<string>('')
 let timeLeft = ref(600);
 let timeStr = ref('10:00')
 let rechargeInfo = ref<any>({});
+const hasExpred = ref(false)
 const Qrvalue = ref('')
 let intervalFun;
 const getDetails = ()=>{
@@ -83,7 +88,10 @@ const getDetails = ()=>{
     axios.get('/pay/upi',{params:params}).then(async (res)=>{
         let data = res.data.data;
         rechargeInfo.value = data;
-        timeLeft.value = data.exp_time
+        timeLeft.value = data.exp_time;
+        if(data.exp_time == 0) {
+            hasExpred.value = true
+        }
         Qrvalue.value = await QRCode.toDataURL(data.qrcode)
     })
 }
@@ -202,6 +210,21 @@ onMounted(()=>{
                 width: 100%;
                 background-color: red;
             }
+        }
+    }
+    .other_box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        img {
+            width: 234px;
+            height: 234px;
+        }
+        .word {
+            color: red;
+            font-size: 20px;
+            margin-top: 10px;
+            text-align: center;
         }
     }
 }
