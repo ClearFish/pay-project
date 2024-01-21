@@ -32,8 +32,8 @@
                 </div>
                 <div class="item">
                     <p class="label">Tên Tài Khoản:</p>
-                    <p class="value">{{rechargeInfo.AccountHolderName}}</p>
-                    <img src="@/assets/zalopay/copy.svg" alt=""  @click="copy(rechargeInfo.AccountHolderName)">
+                    <p class="value">{{rechargeInfo.AccountHolderName || ''}}</p>
+                    <img src="@/assets/zalopay/copy.svg" alt=""  @click="copy(rechargeInfo.AccountHolderName || '')">
                 </div>
                 <div class="item">
                     <p class="label">Số tiền:</p>
