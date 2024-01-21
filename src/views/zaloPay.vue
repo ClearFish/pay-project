@@ -8,22 +8,22 @@
             <div class="top">
                 <div class="left">
                     <p class="title">Số tiền</p>
-                    <p class="value">{{rechargeInfo.amount}}</p>
+                    <p class="value">{{rechargeInfo.money}}</p>
                 </div>
                 <div class="right">
                     <p class="title">Mã ký quỹ</p>
-                    <p class="value">{{rechargeInfo.orderNo}}</p>
+                    <p class="value">{{rechargeInfo.sessionId}}</p>
                 </div>
             </div>
             <div class="center">
                 <img src="@/assets/zalopay/logo.svg" alt="">
-                <img :src="Qrvalue" alt="" class="center">
+                <img :src="ercode" alt="" class="center">
             </div>
             <div class="info_box">
                 <div class="item">
                     <p class="label">Ngân Hàng:</p>
-                    <p class="value">{{rechargeInfo.bank_name}}</p>
-                    <img src="@/assets/zalopay/copy.svg" alt="" @click="copy(rechargeInfo.bank_name)">
+                    <p class="value">{{rechargeInfo.bankName}}</p>
+                    <img src="@/assets/zalopay/copy.svg" alt="" @click="copy(rechargeInfo.bankName)">
                 </div>
                 <div class="item">
                     <p class="label">Số Tài Khoản:</p>
@@ -37,24 +37,24 @@
                 </div>
                 <div class="item">
                     <p class="label">Số tiền:</p>
-                    <p class="value">{{rechargeInfo.amount}}</p>
-                    <img src="@/assets/zalopay/copy.svg" alt=""  @click="copy(rechargeInfo.amount)">
+                    <p class="value">{{rechargeInfo.money}}</p>
+                    <img src="@/assets/zalopay/copy.svg" alt=""  @click="copy(rechargeInfo.money)">
                 </div>
                 <div class="item">
                     <p class="label">Nội Dung CK:</p>
-                    <p class="value">{{rechargeInfo.orderNo}}</p>
-                    <img src="@/assets/zalopay/copy.svg" alt=""  @click="copy(rechargeInfo.orderNo)">
+                    <p class="value" style="color:red">{{rechargeInfo.sessionId}}</p>
+                    <img src="@/assets/zalopay/copy.svg" alt=""  @click="copy(rechargeInfo.sessionId)">
                 </div>
                  <div class="item">
                     <p class="label">Thời gian còn lại:</p>
-                    <p class="value">{{timeStr}}</p>
+                    <p class="value"  style="color:red">{{timeStr}}</p>
                     <p class="empty"></p>
                 </div>
             </div>
             <div class="bottom_info">
                 <p class="first">Sử dụng ứng dụng ngân hàng của bạn để quét mã QR để hoàn tất chuyển khoản nhanh chóng! ! !</p>
                 <div class="bottom">
-                    <p class="second">Vui lòng nhất định phải điền Nội Dung CK <span class="add_color">{{rechargeInfo.orderNo}}</span>phía trên khi chuyển khoản.</p>
+                    <p class="second">Vui lòng nhất định phải điền Nội Dung CK <span class="add_color">{{rechargeInfo.sessionId}}</span>phía trên khi chuyển khoản.</p>
                     <p class="add_color">(Nếu không điền đủ thông tin nội dung chuyển khoản, giao dịch của bạn sẽ phải chờ để được xử lý)</p>
                 </div>
             </div>
@@ -81,18 +81,35 @@ let rechargeInfo = ref<any>({});
 const hasExpred = ref(false)
 const Qrvalue = ref('')
 let intervalFun;
-const getDetails = ()=>{
-    let params:any = {
-        orderNo:query.order_number,
-    }
-    axios.get('/pay/upi',{params:params}).then(async (res)=>{
-        let data = res.data.data;
-        rechargeInfo.value = data;
-        timeLeft.value = data.exp_time;
-        if(data.exp_time == 0) {
+const getData = ()=>{
+    axios.post('/banks/'+query.order_number).then(res=>{
+        bankVals.value = res.data;
+        timeLeft.value = res.data.exp_time;
+        if(res.data.exp_time == 0) {
             hasExpred.value = true
         }
-        Qrvalue.value = await QRCode.toDataURL(data.qrcode)
+    });
+}
+getData();
+const getDetails = ()=>{
+    let params:any = {
+        sessionId:query.order_number,
+        bankType:'VnmVietinbank'
+    }
+    axios.post('/pay/bank/Bankconfirm',params).then(async (res)=>{
+        let data = res.data.data;
+        rechargeInfo.value = data;
+        let parms = {
+            amount: res.data.data.money,
+            card_account: res.data.data.account,
+            add_info: res.data.data.remark,
+            acq:res.data.data.bank_othen.pay_acq.value,
+         }
+
+        axios.post('/api/qrcode',parms).then((res)=>{
+            ercode.value = res.data.data;
+         })
+        
     })
 }
 const copy = (str:any)=>{
@@ -102,7 +119,7 @@ const copy = (str:any)=>{
 const transferTime = (val:number)=>{
     let min = Math.floor((val % 3600) / 60);
     let sec = val % 60;
-    timeStr.value = (min > 10 ? min : '0'+min)+':'+(sec > 10 ? sec : '0'+sec)
+    timeStr.value = (min >= 10 ? min : '0'+min)+':'+(sec >= 10 ? sec : '0'+sec)
 }
 onMounted(()=>{
     getDetails();
