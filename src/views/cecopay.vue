@@ -288,7 +288,7 @@ const submit = ()=>{
             box-sizing: border-box;
             padding: 15px;
             .qrcode {
-                padding: 20px;
+                padding: 10px;
                 box-sizing: border-box;
                 border-radius: 12px;
                 border: 1px solid #F8B403;
@@ -310,6 +310,10 @@ const submit = ()=>{
                     position: absolute;
                     right: -2px;
                     top: -10px;
+                }
+                img {
+                    width: 100%;
+                    height: auto;
                 }
             }
         }
