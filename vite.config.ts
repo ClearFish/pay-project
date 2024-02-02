@@ -22,7 +22,8 @@ export default defineConfig({
         changeOrigin:true,
       },
       "/pay":{
-        target:"https://vnmag.lqqpay.com",
+        //  https://vnmag.lqqpay.com
+        target:"https://pay-inrkk.lottott.com",
         changeOrigin:true,
       },
       "/api":{

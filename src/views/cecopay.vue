@@ -119,6 +119,7 @@ const selectList = ref(
         {name:'Paytm',img:Img1,link:'paytmmp://pay'},
         {name:'PhonePe',img:Img2,link:'phonepe://pay'},
         {name:'Google Pay',img:Img3,link:'gpay://upi/pay'},
+        // upi://pay?mc=5411&am=2100&cu=INR&pa=im.201024410107@indus&pn=Mr.Shoyabkhan&tr=EZV2024013015522025282896&tn=NUmAKJ5roEJY16/
         {name:'UPI',img:Img4,link:'upi://pay'}
     ]
 )
@@ -149,7 +150,8 @@ const chosePay = (item:any,index:number)=>{
     payVal.value = item;
     chosedIndex.value = index;
     let urlParams = rechargeInfo.value.qrcode.split("?")[1]
-    window.location.href = item.link+'?'+urlParams
+    // console.log(item.link+`?mc=5411&am=${Number(rechargeInfo.value.amount)}&cu=INR&`+urlParams,"11")
+    window.location.href = item.link+`?mc=5411&am=${Number(rechargeInfo.value.amount)}&cu=INR&`+urlParams
 }
 onUnmounted(()=>{
     clearInterval(intervalFun)
@@ -162,7 +164,10 @@ const getDetails = ()=>{
         let data = res.data.data;
         rechargeInfo.value = data;
         timeLeft.value = data.exp_time
-        value.value = await QRCode.toDataURL(data.qrcode)
+        let [start,end] = data.qrcode.split('?')
+        let qrValue = start + `?mc=5411&am=${Number(rechargeInfo.value.amount)}&cu=INR&`+end
+        // console.log(qrValue,"qrValue")
+        value.value = await QRCode.toDataURL(qrValue)
     })
 }
 const savePng = ()=>{
