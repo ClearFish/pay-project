@@ -49,6 +49,13 @@
                             <span class="btn btn-invalid" @click="copy(details.bankName)">Nhấn để sao chép</span>
                         </div>
                     </div>
+                    <div class="text-container bank-username bank-info-main">
+                        <span class=" bank-title bank-info-username">Tên chủ thẻ ngân hàng</span>
+                        <div class="bank-content">
+                            <span class="text" id="copy1">{{details.recipient}}</span>
+                            <span class="btn btn-invalid" @click="copy(details.recipient)">Nhấn để sao chép</span>
+                        </div>
+                    </div>
                     <div class="text-container bank-account bank-info-main">
                         <span class=" bank-title bank-info-account">Số tài khoản ngân hàng thụ hưởng</span>
                         <div class="bank-content">
@@ -309,7 +316,7 @@ onMounted(()=>{
                             border-radius: 12px;
                             padding: 0 10px;
                             font-family: DINAlternate-Bold;
-                            font-size: 16px;
+                            font-size: 14px;
                             color: #1B1C21;
                             letter-spacing: 1.2px;
                             font-weight: 700;
