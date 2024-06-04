@@ -9,6 +9,7 @@ import mPayins from "@/views/mpayins.vue"
 import cecoPay from "@/views/cecopay.vue"
 import tbPay from "@/views/tbpay.vue"
 import zaloPay from "@/views/zaloPay.vue" 
+import depositPay from "@/views/depositPay.vue"
 const routes : Array<RouteRecordRaw> = [
     {
         path: '/',
@@ -65,6 +66,11 @@ const routes : Array<RouteRecordRaw> = [
         path:"/zaloPay",
         name:"zaloPay",
         component:zaloPay,
+    },
+    {
+        path:"/depositPay",
+        name:"depositPay",
+        component:depositPay,
     }
 ]
 

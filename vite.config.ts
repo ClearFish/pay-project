@@ -13,6 +13,7 @@ export default defineConfig({
   base:"./",
   server:{
     port:4000,
+    host:'0.0.0.0',
     open:true,
     cors:true,
     // // https:true,
