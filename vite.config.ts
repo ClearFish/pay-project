@@ -28,7 +28,7 @@ export default defineConfig({
         changeOrigin:true,
       },
       "/api":{
-        target:"http://qr.lqqpay.com",
+        target:"https://pay.inupi.in",
         changeOrigin:true,
       },
       "/addons":{
