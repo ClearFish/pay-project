@@ -1,89 +1,97 @@
 <template>
      <div class="big_box">
-        <div class="top_box">
-            <div class="top_left">
-                <div class="title">Transfer payment</div>
-                <div class="sub_title">Follow steps below to finish deposit</div>
-            </div>
-            <div class="top_right">
-                <div class="cancle_btn">Cancel</div>
-            </div>
-        </div>
-        <div class="content_box">
-            <div class="top_time">
-                <img src="@/assets/upi/time.svg" alt="">
-                <div class="word">This order will cancel in</div>
-                <div class="time">{{timeStr}}</div>
-            </div>
-            <div class="container_box">
-                <div class="cont_title">
-                    <div class="title">Step1: Transfer payment</div>
-                    <div class="sub_title">Please send payment to this address.</div>
-                    <div class="sub_title">Please scan QRcode and send payment to this address.</div>
+        <div v-if="rechargeInfo.state == 1">
+            <div class="top_box">
+                <div class="top_left">
+                    <div class="title">Transfer payment</div>
+                    <div class="sub_title">Follow steps below to finish deposit</div>
                 </div>
-                <div class="qrcode_box">
-                    <div class="img_box">
-                         <qrcode-vue 
-                            class="qrcode"  
-                            :value="qrVal" 
-                            :size="136" 
-                            :margin="2" 
-                            :level="level" 
-                            id="picture"  
-                            ref="qrcodeRef"
+                <div class="top_right">
+                    <!-- <div class="cancle_btn">Cancel</div> -->
+                </div>
+            </div>
+            <div class="content_box">
+                <div class="top_time">
+                    <img src="@/assets/upi/time.svg" alt="">
+                    <div class="time_n" v-if="rechargeInfo.state == 1">
+                        <div class="word">This order will cancel in</div>
+                        <div class="time">{{timeStr}}</div>
+                    </div>
+                    <div class="word" v-if="rechargeInfo.state == 6 || rechargeInfo.state == 7">This order had been expired</div>
+                    <div class="word" v-if="rechargeInfo.state == 2">This order had been completed</div>
+                </div>
+                <div class="container_box">
+                    <div class="cont_title">
+                        <div class="title">Step1: Transfer payment</div>
+                        <div class="sub_title">Please send payment to this address.</div>
+                        <div class="sub_title">Please scan QRcode and send payment to this address.</div>
+                    </div>
+                    <div class="qrcode_box">
+                        <div class="img_box" id="qrCodebox">
+                            <qrcode-vue 
+                                class="qrcode"  
+                                :value="qrVal" 
+                                :size="136" 
+                                :margin="2" 
+                                :level="level" 
+                                id="picture"  
+                                ref="qrcodeRef"
+                            />
+                        </div>
+                        <div class="save_btn" @click="saveImg">Save Image</div>
+                    </div>
+                    <div class="info_box">
+                        <div class="info_item">
+                            <div class="label">Amount</div>
+                            <div class="value amount_val">
+                                <div class="amount">{{rechargeInfo.amount || ''}}</div>
+                                <div class="dw">{{rechargeInfo.currency}}</div>
+                                <div class="btn" @click="copy(rechargeInfo.amount)">Copy</div>
+                            </div>
+                        </div>
+                        <div class="info_item">
+                            <div class="label">Address</div>
+                            <div class="value address_val">
+                                <div class="amount address">{{rechargeInfo.extParam}}</div>
+                                <div class="btn" @click="copy(rechargeInfo.extParam)">Copy</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tips_box">
+                        <div class="tips_item">The upi it's 100% safe.please feel free to transfer.</div>
+                        <div class="tips_item">This address only valid for this order. Do not transfer without apply.</div>
+                    </div>
+                </div>
+                <div class="container_box steps2_box">
+                    <div class="cont_title">
+                        <div class="title">Step2: Fill in UTR Number</div>
+                        <div class="sub_title">Please copy and fill in 12 digit UTR number.</div>
+                    </div>
+                    <div class="tips_box">
+                        <div class="tips_item">Wrong UTR will cause delay.</div>
+                    </div>
+                    <div class="guie_box">
+                        <img src="@/assets/upi/finger.svg" alt="" class="finger">
+                        <div class="word">Where to find UTR?</div>
+                    </div>
+                    <div class="input_box">
+                        <input 
+                            class="utr_input"
+                            placeholder="UTR Number"
+                            placeholderStyle="color:#999999;font-size:20px;font-weight:700"
+                            v-model="utrNumber"
                         />
+                        <div class="btn" @click="paste">Paste</div>
                     </div>
-                    <div class="save_btn" @click="saveImg">Save Image</div>
+                    <div class="confirm_box" @click="submitUpi" v-if="rechargeInfo.state == 1">Confirm</div>
+                    <div class="confirm_box" @click="submitUpi" v-if="rechargeInfo.state == 2">Completed</div>
+                    <div class="confirm_box cancle_btm" v-if="rechargeInfo.state == 6 || rechargeInfo.state == 7">Expried</div>
                 </div>
-                <div class="info_box">
-                    <div class="info_item">
-                        <div class="label">Amount</div>
-                        <div class="value amount_val">
-                            <div class="amount">{{rechargeInfo.amount || ''}}</div>
-                            <div class="dw">{{rechargeInfo.currency}}</div>
-                            <div class="btn" @click="copy(rechargeInfo.amount)">Copy</div>
-                        </div>
-                    </div>
-                    <div class="info_item">
-                        <div class="label">Address</div>
-                        <div class="value address_val">
-                            <div class="amount address">{{rechargeInfo.extParam}}</div>
-                            <div class="btn" @click="copy(rechargeInfo.extParam)">Copy</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tips_box">
-                    <div class="tips_item">The upi it's 100% safe.please feel free to transfer.</div>
-                    <div class="tips_item">This address only valid for this order. Do not transfer without apply.</div>
-                </div>
-            </div>
-             <div class="container_box steps2_box">
-                <div class="cont_title">
-                    <div class="title">Step2: Fill in UTR Number</div>
-                    <div class="sub_title">Please copy and fill in 12 digit UTR number.</div>
-                </div>
-                <div class="tips_box">
-                    <div class="tips_item">Wrong UTR will cause delay.</div>
-                </div>
-                <div class="guie_box">
-                    <img src="@/assets/upi/finger.svg" alt="" class="finger">
-                    <div class="word">Where to find UTR?</div>
-                </div>
-                <div class="input_box">
-                    <input 
-                        class="utr_input"
-                        placeholder="UTR Number"
-                        placeholderStyle="color:#999999;font-size:20px;font-weight:700"
-                        v-model="utrNumber"
-                    />
-                    <div class="btn" @click="paste">Paste</div>
-                </div>
-                <div class="confirm_box">Confirm</div>
             </div>
         </div>
     </div>  
 </template>
-<script setup>
+<script setup lang="ts">
 import {ref, onUnmounted,onMounted} from "vue"
 import axios from "axios"
 import { useRoute } from "vue-router";
@@ -93,38 +101,71 @@ import QrcodeVue from "qrcode.vue"
 import dayjs from "dayjs"
 import {base64ToBlob} from "../common/base64toBlob.js"
 const {query} = useRoute();
-let rechargeInfo = ref({})
-let timeLeft = ref(null)
-const utrNumber = ref(null)
-let timeStr = ref('10:00')
-const qrVal = ref(null)
-const level = ref('M');
-const qrcodeRef = ref(null)
+import html2canvas from 'html2canvas'; 
+let rechargeInfo = ref<any>({})
+let timeLeft = ref<any>(null)
+const utrNumber = ref<any>(null)
+let timeStr = ref<any>('10:00')
+const qrVal = ref<any>(null)
+const level = ref<any>('M');
+const qrcodeRef = ref<any>(null)
 let intervalFun;
 const getData = ()=>{
     axios.get('api/pay/queryOrder/'+query.order_number).then(async (res)=>{
         let data = await res.data.data;
         rechargeInfo.value = data;
-        let timeDiff = dayjs().diff(data.expiredTime, 'second');
-        qrVal.value = data.extParam
+        let timeDiff = data.expiredTime - dayjs().unix()
+        qrVal.value = data.qrcode
         timeLeft.value = timeDiff
     })
 }
-const transferTime = (val)=>{
+const transferTime = (val:any)=>{
+    let hour = Math.floor(val/3600)
     let min = Math.floor((val % 3600) / 60);
     let sec = val % 60;
-    timeStr.value = (min > 10 ? min : '0'+min)+':'+(sec > 10 ? sec : '0'+sec)
+    timeStr.value =(hour>0?hour>10?hour:'0'+hour:'00')+':' +(min > 10 ? min : '0'+min)+':'+(sec > 10 ? sec : '0'+sec)
 }
-const copy = (str)=>{
+const copy = (str:any)=>{
      copyDomText(str);
      showToast("copy suuess")
 }
 const saveImg = ()=>{
-    let myCanvas = document.getElementById('picture');
+    let myCanvas:any = document.getElementById('picture');
     let a = document.createElement("a")
     a.href = myCanvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
     a.download = "qrcode.png"
     a.click()
+    // const element:any = document.getElementById('qrCodebox');
+    // html2canvas(element).then((canvas) => {
+    //     // 创建一个图片元素
+    //     let img = new Image();
+    //     img.src = canvas.toDataURL('image/png');
+    //     img.style.display = 'none';
+    //     document.body.appendChild(img);
+ 
+    //     // 创建一个链接元素
+    //     let a = document.createElement('a');
+    //     a.href = img.src;
+    //     a.download = 'downloaded-image.png'; // 设置下载的文件名
+    //     a.click(); // 模拟点击触发下载
+ 
+    //     // 清理DOM
+    //     document.body.removeChild(img);
+    //   });
+}
+const submitUpi = ()=>{
+    if(!utrNumber.value) {
+        showToast("please enter the UTR Number")
+    }else {
+        let params = {
+            orderId:rechargeInfo.value.payOrderId,
+            utrNumber:utrNumber.value
+        }
+        axios.post('/api/pay/updateUtrNumber',params).then(async (res)=>{
+            let data = res.data;
+            showToast(data.msg)
+        })
+    }
 }
 const paste = async()=>{
     let res = await navigator.clipboard.readText();
@@ -207,6 +248,10 @@ onMounted(async ()=>{
                 font-weight: 900;
                 font-size: 18px;
                 color: #D51010;
+            }
+            .time_n {
+                display: flex;
+                align-items: center;
             }
         }
         .container_box {
@@ -410,6 +455,9 @@ onMounted(async ()=>{
                 display: flex;
                 justify-content: center;
                 align-items: center;
+            }
+            .cancle_btm {
+                background: #666;
             }
         }
     }
